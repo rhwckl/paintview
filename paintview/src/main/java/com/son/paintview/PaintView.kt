@@ -5,6 +5,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import rx.Subscriber
 
 /**
  * Created by son on 2/14/17.
@@ -23,6 +24,7 @@ class CustomPaint(color: Int = Color.BLACK, strokeWidth: Float = 10.0f) : Paint(
 class PaintView : View {
     val path = Path()
     val paint = CustomPaint()
+    var onTouchListener: Subscriber<PointF>? = null
 
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
@@ -37,6 +39,8 @@ class PaintView : View {
         val x = event.x
         val y = event.y
 
+        onTouchListener?.onNext(PointF(x, y))
+
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 path.moveTo(x, y)
@@ -47,6 +51,7 @@ class PaintView : View {
                 invalidate()
             }
             MotionEvent.ACTION_UP -> {
+                onTouchListener?.onCompleted()
                 path.lineTo(x, y)
                 invalidate()
             }
