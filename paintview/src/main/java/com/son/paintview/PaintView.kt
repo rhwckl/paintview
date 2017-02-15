@@ -21,7 +21,7 @@ class CustomPaint(color: Int = Color.BLACK, strokeWidth: Float = 10.0f) : Paint(
     }
 }
 
-class PaintView : View {
+open class PaintView : View {
     val path = Path()
     val paint = CustomPaint()
     var onTouchListener: Subscriber<PointF>? = null
